@@ -10,6 +10,7 @@ import org.ektorp.impl.StdCouchDbInstance;
 import com.vaadin.Application;
 import com.vaadin.ui.*;
 
+import de.griffl.proofofconcept.db.DBsettings;
 import de.griffl.proofofconcept.presenter.MainWindowPresenter;
 import de.griffl.proofofconcept.view.MainWindowView;
 
@@ -21,11 +22,11 @@ public static ThreadLocal<CouchDbConnector> db = new ThreadLocal<CouchDbConnecto
 	@Override
 	public void init() {
 		 HttpClient httpClient = new StdHttpClient.Builder()
-		.host("localhost")
-		.port(5984)
+		.host(DBsettings.HOST)
+		.port(DBsettings.PORT)
 		.build();
 		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-		CouchDbConnector dbC = new StdCouchDbConnector("testgriffl", dbInstance);
+		CouchDbConnector dbC = new StdCouchDbConnector(DBsettings.DATABASE, dbInstance);
 		db.set(dbC);
 		
 		MainWindowView mwv = new MainWindowView("Hauptfenster");

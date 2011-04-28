@@ -97,6 +97,7 @@ public class MainWindowPresenter implements Presenter, Serializable{
 				pdfDoc.setDocument(binaryFile);
 				ProofofconceptApplication.dbC.create(pdfDoc);
 				
+				
 				String id = pdfDoc.getId();
 				
 				callPDFviewer(id);

@@ -3,6 +3,7 @@
     <wb-module deploy-name="ProofOfConcept">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
         <property name="context-root" value="ProofOfConcept"/>
         <property name="java-output-path" value="/ProofOfConcept/build/classes"/>
     </wb-module>

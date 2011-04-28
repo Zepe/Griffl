@@ -3,14 +3,13 @@ package de.griffl.proofofconcept.presenter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.logging.Logger;
 
-import org.icepdf.core.exceptions.PDFException;
-import org.icepdf.core.exceptions.PDFSecurityException;
-import org.icepdf.core.pobjects.Document;
+
 
 import com.vaadin.Application;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.ProgressIndicator;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Window;
@@ -26,7 +25,7 @@ import de.griffl.proofofconcept.ProofofconceptApplication;
 import de.griffl.proofofconcept.pdf.PDFDocument;
 
 
-public class MainWindowPresenter implements Presenter{
+public class MainWindowPresenter implements Presenter, Serializable{
 	public interface Display {
 		Window asWindow();
 		void setText(String txt);
@@ -37,6 +36,7 @@ public class MainWindowPresenter implements Presenter{
 		
 	
 	}
+	private static Logger logger = Logger.getLogger(MainWindowPresenter.class.getName());
 	private Display display;
 	private Upload upload;
 	public MainWindowPresenter(Display display){
@@ -80,16 +80,22 @@ public class MainWindowPresenter implements Presenter{
 		upload.addListener(new Upload.SucceededListener() {
 			
 			public void uploadSucceeded(SucceededEvent event) {
+				
+				if(os != null)
 				display.setText("Dokument \"" + event.getFilename()
                         + "\" erfolgreich hochgeladen");
+				else
+					display.setText("Dokument \"" + event.getFilename()
+	                        + "\" erfolgreich hochgeladen null");
+				
 				
 				byte[] binaryFile = os.toByteArray();
 				
 				PDFDocument pdfDoc = new PDFDocument();
 				
 				pdfDoc.setDocument(binaryFile);
-				
-				ProofofconceptApplication.db.get().create(pdfDoc);
+				ProofofconceptApplication.dbC.create(pdfDoc);
+				//ProofofconceptApplication.db.get().create(pdfDoc);
 				
 				
 			}

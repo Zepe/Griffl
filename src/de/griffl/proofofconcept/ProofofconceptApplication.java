@@ -8,7 +8,6 @@ import org.ektorp.impl.StdCouchDbConnector;
 import org.ektorp.impl.StdCouchDbInstance;
 
 import com.vaadin.Application;
-import com.vaadin.ui.*;
 
 import de.griffl.proofofconcept.db.DBsettings;
 import de.griffl.proofofconcept.presenter.MainWindowPresenter;
@@ -16,8 +15,14 @@ import de.griffl.proofofconcept.view.MainWindowView;
 
 
 public class ProofofconceptApplication extends Application {
-public static ThreadLocal<CouchDbConnector> db = new ThreadLocal<CouchDbConnector>();
+//public static final ThreadLocal<CouchDbConnector> db = new ThreadLocal<CouchDbConnector>();
+	private static  HttpClient httpClient = new StdHttpClient.Builder()
+	.host(DBsettings.HOST)
+	.port(DBsettings.PORT)
+	.build();
 	
+	private static CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
+	public static CouchDbConnector dbC = new StdCouchDbConnector(DBsettings.DATABASE, dbInstance);
 	
 	@Override
 	public void init() {
@@ -27,7 +32,7 @@ public static ThreadLocal<CouchDbConnector> db = new ThreadLocal<CouchDbConnecto
 		.build();
 		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
 		CouchDbConnector dbC = new StdCouchDbConnector(DBsettings.DATABASE, dbInstance);
-		db.set(dbC);
+		//db.set(dbC);
 		
 		MainWindowView mwv = new MainWindowView("Hauptfenster");
 		MainWindowPresenter mwp = new MainWindowPresenter(mwv);

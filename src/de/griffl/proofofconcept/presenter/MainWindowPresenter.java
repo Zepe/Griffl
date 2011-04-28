@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 
 import com.vaadin.Application;
+import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ProgressIndicator;
 import com.vaadin.ui.Upload;
@@ -95,12 +96,18 @@ public class MainWindowPresenter implements Presenter, Serializable{
 				
 				pdfDoc.setDocument(binaryFile);
 				ProofofconceptApplication.dbC.create(pdfDoc);
+				
+				String id = pdfDoc.getId();
+				
+				callPDFviewer(id);
+				
 				//ProofofconceptApplication.db.get().create(pdfDoc);
 				
 				
 			}
+
 		});
-			
+
 		upload.addListener(new Upload.FailedListener() {
 			
 			public void uploadFailed(FailedEvent event) {
@@ -118,7 +125,9 @@ public class MainWindowPresenter implements Presenter, Serializable{
 			}
 		});
 	}
-	
+	private void callPDFviewer(String id){
+		display.asWindow().open(new ExternalResource(display.asWindow().getApplication().getURL()+id));
+	}
 	private ByteArrayOutputStream os = new ByteArrayOutputStream();
 	
 	class PDFReceiver implements Receiver {
@@ -133,8 +142,9 @@ public class MainWindowPresenter implements Presenter, Serializable{
 		  	            }
 	}
 
-	public void go(Application app) {
+	public Window go(Application app) {
 		app.setMainWindow(display.asWindow());
+		return display.asWindow();
 	}
 	
 	

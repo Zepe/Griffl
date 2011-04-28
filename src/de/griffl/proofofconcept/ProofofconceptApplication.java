@@ -8,10 +8,15 @@ import org.ektorp.impl.StdCouchDbConnector;
 import org.ektorp.impl.StdCouchDbInstance;
 
 import com.vaadin.Application;
+import com.vaadin.ui.Window;
 
 import de.griffl.proofofconcept.db.DBsettings;
+import de.griffl.proofofconcept.db.PDFRepository;
+import de.griffl.proofofconcept.pdf.PDFDocument;
 import de.griffl.proofofconcept.presenter.MainWindowPresenter;
+import de.griffl.proofofconcept.presenter.PDFViewerPresenter;
 import de.griffl.proofofconcept.view.MainWindowView;
+import de.griffl.proofofconcept.view.PDFViewerView;
 
 
 public class ProofofconceptApplication extends Application {
@@ -23,6 +28,7 @@ public class ProofofconceptApplication extends Application {
 	
 	private static CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
 	public static CouchDbConnector dbC = new StdCouchDbConnector(DBsettings.DATABASE, dbInstance);
+	public static PDFRepository repository = new PDFRepository(PDFDocument.class, dbC);
 	
 	@Override
 	public void init() {
@@ -38,6 +44,22 @@ public class ProofofconceptApplication extends Application {
 		MainWindowPresenter mwp = new MainWindowPresenter(mwv);
 		 
 		mwp.go(this);
+	}
+	
+	
+	public Window getWindow(String name){
+		
+		if(super.getWindow(name) == null && repository.contains(name)){
+			
+			PDFDocument doc = repository.get(name);
+			PDFViewerView pvv = new PDFViewerView(name);
+			PDFViewerPresenter pvp = new PDFViewerPresenter(pvv, doc);
+			
+			return pvp.go(this); 
+		}
+		
+		return super.getWindow(name);
+		
 	}
 
 }

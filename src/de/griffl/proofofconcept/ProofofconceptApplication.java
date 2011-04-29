@@ -1,7 +1,5 @@
 package de.griffl.proofofconcept;
 
-// hello
-
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
 import org.ektorp.http.HttpClient;
@@ -57,7 +55,10 @@ public class ProofofconceptApplication extends Application {
 			PDFViewerView pvv = new PDFViewerView(name);
 			PDFViewerPresenter pvp = new PDFViewerPresenter(pvv, doc);
 			
-			return pvp.go(this); 
+			Window pdfWindow = pvp.go(this);	
+			addWindow(pdfWindow);
+			
+			return pdfWindow;
 		}
 		
 		return super.getWindow(name);

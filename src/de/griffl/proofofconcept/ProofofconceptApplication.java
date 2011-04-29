@@ -52,7 +52,7 @@ public class ProofofconceptApplication extends Application {
 		if(super.getWindow(name) == null && repository.contains(name)){
 			
 			PDFDocument doc = repository.get(name);
-			PDFViewerView pvv = new PDFViewerView(name);
+			PDFViewerView pvv = new PDFViewerView(name, this);
 			PDFViewerPresenter pvp = new PDFViewerPresenter(pvv, doc);
 			
 			Window pdfWindow = pvp.go(this);	

@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import com.vaadin.Application;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.terminal.Resource;
 import com.vaadin.terminal.StreamResource;
@@ -33,26 +34,34 @@ public class PDFViewerView extends Window implements Display {
 	private Button backward = new Button ("<");
 	private Panel ground = new Panel();
 	private static final Logger logger = Logger.getLogger(PDFViewerView.class.getName());
+	private Application app;
 	
-	public PDFViewerView(String name){
-		super(name);
+	public PDFViewerView(String name, Application app){
+				super(name);
 		
 				setTheme("grifflmytesttheme");
 				
-				Label label = new Label("Docoment name");
+				Label label = new Label("Document name");
 				addComponent(label);
 				
-				setLayout(new HorizontalLayout());
-				
+				HorizontalLayout hl = new HorizontalLayout();
+				ground.setHeight("600px");
+				ground.setWidth("400px");
+				hl.addComponent(ground);
 				
 				final Panel marginalRight = new Panel();
-				marginalRight.setLayout(new VerticalLayout());
+				
+				hl.addComponent(marginalRight);
+			
+			//	marginalRight.setLayout(new VerticalLayout());
+				addComponent(hl);
 				addComponent(marginalRight);
+				
 	
+				this.app = app;
 				
 				
-				
-			}
+		}
 
 
 	public Window asWindow() {
@@ -62,6 +71,7 @@ public class PDFViewerView extends Window implements Display {
 
 	public void setPage(Image currentPageIm) {
 		ground.setIcon(createStreamResource(currentPageIm));
+		requestRepaint();
 	}
 
 
@@ -89,7 +99,7 @@ public class PDFViewerView extends Window implements Display {
 				return new ByteArrayInputStream(imagebuffer.toByteArray());
 			}
 		};
-		return new StreamResource(curIm, "myImage.png", this.getApplication());
+		return new StreamResource(curIm, "myImage.png", app);
 	}
 	
 
